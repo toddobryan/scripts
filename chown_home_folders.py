@@ -17,3 +17,5 @@ def chown_children_recursively(path: Path, user: str, group: str):
         for file in files:
             shutil.chown(os.path.join(root, file), user, group)
 
+if __name__ == "__main__":
+    chown_home_folders()
