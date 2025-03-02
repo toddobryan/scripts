@@ -9,9 +9,8 @@ COLLECTED = "collected"
 ROOT = "root"
 MODE = 0o555
 
-def chown_home_folders():
-    for user in HOME.iterdir():
-        user: Path
+def chown_home_folders() -> None:
+    for user in HOME.iterdir(): #type: Path
         if user.is_dir():
             shutil.chown(user, user.name, user.name)
             chown_children_recursively(user, user.name, user.name)
@@ -23,7 +22,7 @@ def chown_home_folders():
             os.chmod(collected, MODE)
             chmod_children_recursively(collected, MODE)
 
-def chown_children_recursively(path: Path, user: str, group: str):
+def chown_children_recursively(path: Path, user: str, group: str) -> None:
     subprocess.run(["find", f"{path}", "-xtype", "l", "-exec", "rm", "{}", "\\;"])
     for root, dirs, files in os.walk(path):
         for dir in dirs:
@@ -31,7 +30,7 @@ def chown_children_recursively(path: Path, user: str, group: str):
         for file in files:
             shutil.chown(os.path.join(root, file), user, group)
 
-def chmod_children_recursively(path: Path, mode: int):
+def chmod_children_recursively(path: Path, mode: int) -> None:
     for root, dirs, files in os.walk(path):
         for dir in dirs:
             os.chmod(os.path.join(root, dir), mode)
